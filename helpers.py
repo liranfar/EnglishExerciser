@@ -1,5 +1,7 @@
 import sys
 
+from colors import red, black, blue
+
 
 def query_yes_no(question, default="yes"):
     """Ask a yes/no question via raw_input() and return their answer.
@@ -14,11 +16,11 @@ def query_yes_no(question, default="yes"):
     valid = {"yes": True, "y": True, "ye": True,
              "no": False, "n": False}
     if default is None:
-        prompt = " [y/n] "
+        prompt = " ["+blue("y") + "/" + red("n") + "] "
     elif default == "yes":
-        prompt = " [Y/n] "
+        prompt = " ["+blue("Y") + "/" + red("n") + "] "
     elif default == "no":
-        prompt = " [y/N] "
+        prompt = " ["+blue("y") + "/" + red("N") + "] "
     else:
         raise ValueError("invalid default answer: '%s'" % default)
 
