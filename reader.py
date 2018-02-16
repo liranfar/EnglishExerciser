@@ -1,53 +1,106 @@
 # coding=utf-8
-import openpyxl
-import os
 import random
-
 import sys
+import traceback
+
 from bidi.algorithm import get_display
-from colors import green, cyan, yellow, red
+
+from colors import green, cyan, yellow, red, magenta
+from excel import Excel
 from helpers import query_yes_no, progressBar
+from phrase import Phrase
 from styles import yellow_fill, red_fill, green_fill
+from translator import Translations
+from view import View
 
-sys.stdout.write('\rOpening workbook...')
-sys.stdout.flush()
-vocbulary_wb = openpyxl.load_workbook('vocabulary.xlsx')
 
-translation_cols = ['C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
+def main():
+    View.print_('Opening workbook...')
 
-sys.stdout.write('\rReading sheets...')
+    # opening the excel file
+    vocbulary_wb = Excel('vocabulary.xlsx')
 
-for sheet_name in vocbulary_wb.get_sheet_names():
-    sys.stdout.write('\rCurrent sheet : {}\n'.format(sheet_name))
-    current_sheet = vocbulary_wb.get_sheet_by_name(sheet_name)
-    sys.stdout.write('Reading rows...')
+    # translation columns in the sheet ( export to config file? )
+    phrase = Phrase(vocbulary_wb)
+    # translate = Translate(vocbulary_wb)
+    known_words = phrase.get_high_marked()
 
-    rows = list(range(3, current_sheet.max_row + 1))
-    random.shuffle(rows)
-    os.system('clear')
-    for row in rows:
+    View.print_('Reading sheets...')
+    # iterate on sheets
+    for sheet_name in vocbulary_wb.get_sheet_names():
 
-        try:
-            word = current_sheet['A' + str(row)].value
-            context = current_sheet['L' + str(row)].value
-            translations = [current_sheet[c + str(row)].value for c in translation_cols if current_sheet[c + str(row)].value is not None]
-            sys.stdout.write('\rWord is: {}.'.format(green(word)))
-            known = query_yes_no(" Know it?")
-            if not known:
-                sys.stdout.write('\rContext is: {}'.format(cyan(context)))
-                if query_yes_no("...", ):
-                    current_sheet['A' + str(row)].fill = yellow_fill
+        # display current sheet
+        View.print_('Current sheet : {}'.format(sheet_name))
+        current_sheet = vocbulary_wb.get_sheet_by_name(sheet_name)
+
+        # get number of rows
+        rows = list(range(3, current_sheet.max_row + 1))
+
+        # shuffle order
+        random.shuffle(rows)
+
+        # clear screen
+        View.clear_screen()
+
+        # iterate rows
+        for row in rows:
+            try:
+                # print progress-bar off known_words
+                progressBar(phrase.seen, phrase.get_not_yet_classified(), magenta, 80)
+                # print seen words counter
+                View.print_title(phrase.seen)
+                # get phrase
+                current_phrase = vocbulary_wb.get_value(current_sheet, 'A' + str(row))
+                phrase.increase_seen_by_one()
+                # get context
+                current_context = vocbulary_wb.get_value(current_sheet, 'L' + str(row))
+                # get translations ( verb, noun etc.. )
+                current_translations = Translations.get_translations(current_sheet, row)
+                # display the current word
+                View.print_('Word is: {}.'.format(green(current_phrase)))
+
+                # known prompt
+                known = query_yes_no(" Know it?")
+                if not known:
+
+                    # display context
+                    View.print_('Context is: {}'.format(cyan(current_context)))
+                    if query_yes_no("...", ):
+                        # sign known level as mid
+                        vocbulary_wb.fill_color(current_sheet, 'A' + str(row), yellow_fill)
+
+                    else:
+                        # sign known level as low
+                        vocbulary_wb.fill_color(current_sheet, 'A' + str(row), red_fill)
                 else:
-                    current_sheet['A' + str(row)].fill = red_fill
-            else:
-                current_sheet['A' + str(row)].fill = green_fill
+                    # sign known level as high
+                    vocbulary_wb.fill_color(current_sheet, 'A' + str(row), green_fill)
 
-            query_yes_no(yellow(get_display(','.join(translations))).encode('utf-8'))
-        except Exception:
-            print(red("Error reading word..."))
-            if not query_yes_no("Move to next word?"):
-                sys.exit(1)
+                # display translations
+                query_yes_no(yellow(get_display(','.join(current_translations))).encode('utf-8'))
 
-        finally:
-            vocbulary_wb.save('vocabulary.xlsx')
-            os.system('clear')
+                # save to disk
+                vocbulary_wb.save_changes()
+
+            except KeyboardInterrupt:
+
+                # clear screen
+                View.clear_screen()
+
+                # prompt continuing
+                if query_yes_no("Are you sure you want to quit?"):
+                    sys.exit(0)
+
+            except Exception as e:
+                traceback.print_exc(file=sys.stdout)
+                print(red("Error reading word... {}".format(e)))
+                if not query_yes_no("Move to next word?"):
+                    sys.exit(0)
+            finally:
+                # clear screen
+                View.clear_screen()
+
+
+if __name__ == '__main__':
+    main()
+
