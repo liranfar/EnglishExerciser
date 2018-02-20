@@ -11,10 +11,10 @@ class Excel:
         self.engine = openpyxl.load_workbook(path)
 
     def get_sheet_by_name(self, name):
-        return self.engine.get_sheet_by_name(name)
+        return self.engine[name]
 
     def get_sheet_names(self):
-        return self.engine.get_sheet_names()
+        return self.engine.sheetnames
 
     def get_value(self, current_sheet, col_row):
         return current_sheet[col_row].value
