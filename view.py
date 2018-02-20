@@ -24,7 +24,7 @@ class View():
         os.system('clear')
 
     @classmethod
-    def print_title(cls, seen):
+    def print_title(cls, title):
         cls.print_('')
-        cls.print_(magenta('#' + str(seen)))
+        cls.print_(magenta(title))
         cls.print_(magenta('--------------------------'))

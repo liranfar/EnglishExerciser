@@ -23,14 +23,12 @@ def main():
     # translation columns in the sheet ( export to config file? )
     phrase = Phrase(vocbulary_wb)
     # translate = Translate(vocbulary_wb)
-    known_words = phrase.get_high_marked()
+    # known_words = phrase.get_high_marked()
 
     View.print_('Reading sheets...')
     # iterate on sheets
     for sheet_name in vocbulary_wb.get_sheet_names():
 
-        # display current sheet
-        View.print_('Current sheet : {}'.format(sheet_name))
         current_sheet = vocbulary_wb.get_sheet_by_name(sheet_name)
 
         # get number of rows
@@ -45,10 +43,18 @@ def main():
         # iterate rows
         for row in rows:
             try:
+
+                # display current sheet
+                View.print_('Current sheet : {}'.format(sheet_name))
                 # print progress-bar off known_words
-                progressBar(phrase.seen, phrase.get_not_yet_classified(), magenta, 80)
+                progressBar(phrase.seen, current_sheet.max_row - 2, magenta, 80)
                 # print seen words counter
-                View.print_title(phrase.seen)
+                View.print_title('Seen: ' + str(phrase.seen) +
+                                 ' High: ' + str(phrase.get_high_marked(sheet_name)) +
+                                 ' Mid: ' + str(phrase.get_mid_marked(sheet_name)) +
+                                 ' Low: ' + str(phrase.get_low_marked(sheet_name)) +
+                                 ' Unknown: ' + str(phrase.get_not_yet_classified(sheet_name))
+                                 )
                 # get phrase
                 current_phrase = vocbulary_wb.get_value(current_sheet, 'A' + str(row))
                 phrase.increase_seen_by_one()
@@ -103,4 +109,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
