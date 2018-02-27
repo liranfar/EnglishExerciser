@@ -1,5 +1,5 @@
 # English Exerciser
-a lightweight CLI based, english (to hebrew) phrases exerciser, based on .xlsx file.
+a lightweight english (to hebrew) phrases exerciser using a simple `.xlsx` file.
 
 ##  Usage
     git clone https://github.com/liranfar/EnglishExerciser.git
@@ -14,6 +14,7 @@ a lightweight CLI based, english (to hebrew) phrases exerciser, based on .xlsx f
     
     python reader.py
 
+* The data is in `vocabulary.xlsx`, feel free to create a new one for yours.
 * For already initialized virtualenv just use `$ workon englishExerciser` to enable it or `$ deactivate` to disable.
 * To remove the established virtual-env just disable it and run `$ rmvirtualenv englishExerciser`
 
