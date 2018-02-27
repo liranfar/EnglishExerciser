@@ -17,7 +17,7 @@ a lightweight english (to hebrew) phrases exerciser using a simple `.xlsx` file.
 * The data is in `vocabulary.xlsx`, feel free to create a new one for yours.
 * For already initialized virtualenv just use `$ workon englishExerciser` to enable it or `$ deactivate` to disable.
 * To remove the established virtual-env just disable it and run `$ rmvirtualenv englishExerciser`
-
+* For now, saving to disk is applied by pressing `ctrl + c`
 ## Resources
 [Automate Your Boring Stuff - Openpyxl](https://automatetheboringstuff.com/chapter12/)
 
