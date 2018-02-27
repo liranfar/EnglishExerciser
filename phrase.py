@@ -3,7 +3,6 @@ from styles import yellow_fill, green_fill
 
 class Phrase:
     def __init__(self, work_book):
-        # TODO replace openpyxl injection with excel engine
         self.work_book = work_book
         self._sheetname_to_knowledge_status = self._init_status()
 
@@ -77,7 +76,7 @@ class Phrase:
     def _update_status_counter(self, sheet_name, sheet_to_status, status):
         try:
             sheet_to_status[sheet_name][status] += 1
-            print('sheet: {}, status: {}, counter: {}'.format(sheet_name,status, str(sheet_to_status[sheet_name][status])))
+           # print('sheet: {}, status: {}, counter: {}'.format(sheet_name,status, str(sheet_to_status[sheet_name][status])))
         except KeyError:
-            print('Initialized status: {} of sheet: {} with 1'.format(status,sheet_name))
+           # print('Initialized status: {} of sheet: {} with 1'.format(status,sheet_name))
             sheet_to_status[sheet_name][status] = 1

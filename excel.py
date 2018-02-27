@@ -1,5 +1,7 @@
 import openpyxl
 
+from view import View
+
 """
 Wrapper class for the excel reader engine - a kind of abstraction/separation layer for modularity
 """
@@ -23,4 +25,5 @@ class Excel:
         current_sheet[col_row].fill = color
 
     def save_changes(self):
+        View.print_("Please wait while saving...")
         self.engine.save(self.path)
