@@ -28,7 +28,7 @@ def main():
         desired_level = sys.argv[1]
 
     except IndexError:
-        desired_level = Level.LOW
+        desired_level = Level.UNKNOWN
 
     phrase_gen = vocabulary_service.get_next_phrase_generator(desired_level)
 
@@ -83,6 +83,7 @@ def main():
             View.clear_screen()
             vocbulary_wb.save_changes(vocabulary_service.get_vocabulary())
             View.print_("Well Done! you passed all the terms for level : {} , see you next time! ".format(desired_level))
+            break
 
         except Exception as e:
             traceback.print_exc(file=sys.stdout)

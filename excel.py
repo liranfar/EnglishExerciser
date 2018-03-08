@@ -30,7 +30,7 @@ class Excel:
 
         View.print_("Please wait while saving...")
         for sheet_name in self.get_sheet_names():
-            for level in [Level.LOW, Level.MID,Level.HIGH]:
+            for level in [Level.LOW, Level.MID,Level.HIGH, Level.UNKNOWN]:
                 for key, phrase in vocabulary[sheet_name][level].iteritems():
                     self.fill_color(
                         color=Level.to_style[phrase.get_level()],

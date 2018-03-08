@@ -1,4 +1,4 @@
-from styles import green_fill, red_fill, yellow_fill
+from styles import green_fill, red_fill, yellow_fill, blank_fill
 
 
 class Level:
@@ -11,7 +11,7 @@ class Level:
         HIGH: green_fill,
         MID: yellow_fill,
         LOW: red_fill,
-        UNKNOWN: None
+        UNKNOWN: blank_fill
     }
     
     @staticmethod
