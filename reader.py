@@ -21,7 +21,10 @@ def main():
     vocbulary_wb = Excel('vocabulary.xlsx')
 
     vocabulary_dict = vocbulary_wb.get_wb_as_dict()
-    vocabulary_service = VocabularyService(vocabulary_dict)
+
+    # TODO change to singleton
+    vocabulary_service = VocabularyService(vocabulary_dict, vocbulary_wb.get_sheet_names())
+    statistic_service = StatisticService(vocabulary_dict)
 
     try:
         # TODO parse the desired level as a Level data
@@ -30,13 +33,12 @@ def main():
     except IndexError:
         desired_level = Level.UNKNOWN
 
-    phrase_gen = vocabulary_service.get_next_phrase_generator(desired_level)
+    phrase_gen = vocabulary_service.get_next_phrase_generator()
 
     while True:
 
         try:
-            # TODO
-            # StatisticService.show(vocabulary_dict)
+            statistic_service.show()
 
             phrase = next(phrase_gen)
 
@@ -61,7 +63,7 @@ def main():
 
             else:
                 phrase.set_level(Level.HIGH)
-                print("phrase {} level has been set to {}". format(phrase.get_value, phrase._level))
+                # print("phrase {} level has been set to {}". format(phrase.get_value, phrase._level))
 
             # display translations
             query_yes_no(yellow(get_display(','.join(phrase.get_translation()))).encode('utf-8'))
@@ -83,7 +85,7 @@ def main():
             View.clear_screen()
             vocbulary_wb.save_changes(vocabulary_service.get_vocabulary())
             View.print_("Well Done! you passed all the terms for level : {} , see you next time! ".format(desired_level))
-            break
+            sys.exit(0)
 
         except Exception as e:
             traceback.print_exc(file=sys.stdout)
