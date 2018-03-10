@@ -7,9 +7,9 @@ class VocabularyService:
         self._sheet_names = sheet_names
 
     def get_next_phrase_generator(self):
-        for sheet_name in self._sheet_names:
+        for level in [Level.UNKNOWN, Level.LOW, Level.MID, Level.HIGH]:
+            for sheet_name in self._sheet_names:
             # TODO: extract the list to a constant one in Level class
-            for level in [Level.UNKNOWN, Level.LOW, Level.MID, Level.HIGH]:
                 for phrase_key, phrase_value in self._vocabulary_dict[sheet_name][level].iteritems():
                     yield phrase_value
 
