@@ -1,5 +1,6 @@
 # English Exerciser
 a lightweight english (to hebrew) phrases exerciser using a simple `.xlsx` file.
+[Illustrating Video](https://www.youtube.com/watch?v=vt5fpE0bzSY)
 
 ##  Usage
     git clone https://github.com/liranfar/EnglishExerciser.git

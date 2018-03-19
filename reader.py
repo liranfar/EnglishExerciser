@@ -34,7 +34,9 @@ def main():
         desired_level = Level.UNKNOWN
 
     phrase_gen = vocabulary_service.get_next_phrase_generator()
-
+	
+    View.clear_screen()
+	
     while True:
 
         try:
