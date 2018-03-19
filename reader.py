@@ -34,9 +34,9 @@ def main():
         desired_level = Level.UNKNOWN
 
     phrase_gen = vocabulary_service.get_next_phrase_generator()
-	
+
     View.clear_screen()
-	
+
     while True:
 
         try:
@@ -86,7 +86,8 @@ def main():
             # clear screen
             View.clear_screen()
             vocbulary_wb.save_changes(vocabulary_service.get_vocabulary())
-            View.print_("Well Done! you passed all the terms for level : {} , see you next time! ".format(desired_level))
+            View.print_(
+                "Well Done! you passed all the terms for level : {} , see you next time! ".format(desired_level))
             sys.exit(0)
 
         except Exception as e:
